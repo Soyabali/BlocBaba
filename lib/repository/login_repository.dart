@@ -22,12 +22,17 @@ class LoginRepo {
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);
+
       if (jsonList.isNotEmpty && jsonList[0]["Result"] == "1") {
+        // here we return token
         return jsonList[0]["sToken"] ?? "No token";
+
       } else {
+        // result !=1 then i return msg
         throw Exception(jsonList[0]["Msg"] ?? "Login failed");
       }
     } else {
+      // here we written server error
       throw Exception("Server error: ${response.statusCode}");
     }
   }

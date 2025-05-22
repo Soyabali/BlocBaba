@@ -13,13 +13,16 @@ class UserListPage extends StatelessWidget {
     return Scaffold(
       // appBar
       appBar: AppBar(title: Text('Block list'),),
+      // here BlocBuilder<UserCubit,List<User>
+      // this is a BlockBuilder
       body: BlocBuilder<UserCubit,List<User>>(
           builder: (context,data){
-            if(data.isEmpty)
+            if(data.isEmpty) {
               return 
                   Center(
                     child: CircularProgressIndicator(),
                   );
+            }
             return ListView.builder(
                 itemCount: data.length,
                 itemBuilder: (context,index){

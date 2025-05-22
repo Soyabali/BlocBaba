@@ -13,65 +13,68 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<LoginCubit,LoginState>(
-        listener: (context, state) {
-          if (state is LoginSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Login Success! Token: ${state.token}")),
-            );
-            print('-----19---xxxxx----------${state.token}');
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Dashboardscreen()),
-            );
-            //
-          } else if (state is LoginFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text("Login Failed: ${state.message}")),
-            );
-          }
-        },
-        builder: (context, state) {
-          final loginCubit = context.read<LoginCubit>();
-          return Padding(
-            padding: EdgeInsets.all(20),
-            child: Center(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Image.asset('assets/logo.png', height: 200),
-                    SizedBox(height: 20),
-                    TextField(
-                      controller: emailController,
-                      decoration: InputDecoration(labelText: 'Mobile'),
-                    ),
-                    SizedBox(height: 20),
-                    TextField(
-                      controller: passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(labelText: 'Password'),
-                    ),
-                    SizedBox(height: 30),
-                    state is LoginLoading
-                        ? CircularProgressIndicator()
-                        : ElevatedButton(
-                      onPressed: () {
-                        final email = emailController.text.trim();
-                        final pass = passwordController.text.trim();
-                        print('--------xxx-----');
+      body: loginui(),
+    );
+  }
+  Widget loginui(){
+    return BlocConsumer<LoginCubit,LoginState>(
+      listener: (context, state) {
+        if (state is LoginSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Login Success! Token: ${state.token}")),
+          );
+          print('-----19---xxxxx----------${state.token}');
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Dashboardscreen()),
+          );
+          //
+        } else if (state is LoginFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Login Failed: ${state.message}")),
+          );
+        }
+      },
+      builder: (context, state) {
+        final loginCubit = context.read<LoginCubit>();
+        return Padding(
+          padding: EdgeInsets.all(20),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Image.asset('assets/logo.png', height: 200),
+                  SizedBox(height: 20),
+                  TextField(
+                    controller: emailController,
+                    decoration: InputDecoration(labelText: 'Mobile'),
+                  ),
+                  SizedBox(height: 20),
+                  TextField(
+                    controller: passwordController,
+                    obscureText: true,
+                    decoration: InputDecoration(labelText: 'Password'),
+                  ),
+                  SizedBox(height: 30),
+                  state is LoginLoading
+                      ? CircularProgressIndicator()
+                      : ElevatedButton(
+                    onPressed: () {
+                      final email = emailController.text.trim();
+                      final pass = passwordController.text.trim();
+                      print('--------xxx-----');
+                      // call a on button click api
+                      context.read<LoginCubit>().login(email, pass);
 
-                        context.read<LoginCubit>().login(email, pass);
-
-                      },
-                      child: Text('Login'),
-                    ),
-                  ],
-                ),
+                    },
+                    child: Text('Login'),
+                  ),
+                ],
               ),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
